@@ -10,9 +10,9 @@ services:
         BASE_IMAGE: ${BASE_IMAGE_OVERRIDE-}
     image: "${LOCALIZATION_IMAGE:?}:${TAG}"
     profiles: [deploy]
-    command: /bin/bash -c "ros2 launch localization localization.launch.py"
+    command: /bin/bash -c "ros2 launch nav2_gps_waypoint_follower_demo gazebo_gps_world.launch.py"
     volumes:
-      - ${MONO_DIR}/src/localization:/root/ament_ws/src/localization
+      - ${MONO_DIR}/src/localization:/root/ament_ws/src/nav2_gps_waypoint_follower_demo
 
   localization_dev:
     build: *localization_build
@@ -20,4 +20,4 @@ services:
     command: tail -F anything
     profiles: [develop]
     volumes:
-      - ${MONO_DIR}/src/localization:/root/ament_ws/src
+      - ${MONO_DIR}/src/localization:/root/ament_ws/src/nav2_gps_waypoint_follower_demo

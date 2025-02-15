@@ -1,23 +1,17 @@
 ARG BASE_IMAGE=ghcr.io/watonomous/robot_base/base:humble-ubuntu22.04
-
 ################################ Source ################################
 FROM ${BASE_IMAGE} AS source
-
 WORKDIR ${AMENT_WS}/src
-
-# Copy in source code 
-COPY src/localization localization
-
+COPY src/localization nav2_gps_waypoint_follower_demo
 # Scan for rosdeps
 RUN apt-get -qq update && rosdep update && \
     rosdep install --from-paths . --ignore-src -r -s \
     | grep 'apt-get install' \
     | awk '{print $3}' \
-    | sort  > /tmp/colcon_install_list
+    | sort > /tmp/colcon_install_list
 
 ################################# Dependencies ################################
 FROM ${BASE_IMAGE} AS dependencies
-
 # Install specific dependencies
 RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-robot-localization \
@@ -40,14 +34,13 @@ RUN apt-get -qq autoremove -y && apt-get -qq autoclean && apt-get -qq clean && \
 
 ################################ Build ################################
 FROM dependencies AS build
-
 # Build ROS2 packages
 WORKDIR ${AMENT_WS}
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
     colcon build \
     --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base ${WATONOMOUS_INSTALL}
 
-# Source and Build Artifact Cleanup 
+# Source and Build Artifact Cleanup
 RUN rm -rf src/* build/* devel/* install/* log/*
 
 # Entrypoint will run before any CMD on launch
