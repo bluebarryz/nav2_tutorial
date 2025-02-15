@@ -1,0 +1,23 @@
+services:
+  localization:
+    build: &localization_build
+      context: ..
+      dockerfile: docker/localization/localization.Dockerfile
+      cache_from:
+        - "${LOCALIZATION_IMAGE:?}:${TAG}"
+        - "${LOCALIZATION_IMAGE:?}:main"
+      args:
+        BASE_IMAGE: ${BASE_IMAGE_OVERRIDE-}
+    image: "${LOCALIZATION_IMAGE:?}:${TAG}"
+    profiles: [deploy]
+    command: /bin/bash -c "ros2 launch localization localization.launch.py"
+    volumes:
+      - ${MONO_DIR}/src/localization:/root/ament_ws/src/localization
+
+  localization_dev:
+    build: *localization_build
+    image: "${LOCALIZATION_IMAGE:?}:dev_${TAG}"
+    command: tail -F anything
+    profiles: [develop]
+    volumes:
+      - ${MONO_DIR}/src/localization:/root/ament_ws/src
