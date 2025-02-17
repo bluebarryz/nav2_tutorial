@@ -13,6 +13,14 @@ services:
     command: /bin/bash -c "ros2 launch nav2_gps_waypoint_follower_demo gazebo_gps_world.launch.py"
     volumes:
       - ${MONO_DIR}/src/localization:/root/ament_ws/src/nav2_gps_waypoint_follower_demo
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/root/.Xauthority
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - TURTLEBOT3_MODEL=waffle
+    network_mode: "host"
+    privileged: true
 
   localization_dev:
     build: *localization_build
