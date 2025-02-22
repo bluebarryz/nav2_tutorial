@@ -20,7 +20,8 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-tile-map \
     ros-${ROS_DISTRO}-navigation2 \
     ros-${ROS_DISTRO}-nav2-bringup \
-    ros-${ROS_DISTRO}-turtlebot3-gazebo
+    ros-${ROS_DISTRO}-turtlebot3-gazebo \ 
+    ros-${ROS_DISTRO}-teleop-twist-keyboard
 
 # Install Rosdep requirements
 COPY --from=source /tmp/colcon_install_list /tmp/colcon_install_list
