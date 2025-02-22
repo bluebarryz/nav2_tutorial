@@ -1,12 +1,17 @@
-# WATonomous ASD Admissions Assignment
+# WATO Nav2
 
-## Prerequisite Installation
-These steps are to setup the monorepo to work on your own PC. We utilize docker to enable ease of reproducibility and deployability.
+## How to run
 
-> Why docker? It's so that you don't need to download any coding libraries on your bare metal pc, saving headache :3
-
-1. This assignment is supported on Linux Ubuntu >= 22.04, Windows (WSL), and MacOS. This is standard practice that roboticists can't get around. To setup, you can either setup an [Ubuntu Virtual Machine](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox#1-overview), setting up [WSL](https://learn.microsoft.com/en-us/windows/wsl/install), or setting up your computer to [dual boot](https://opensource.com/article/18/5/dual-boot-linux). You can find online resources for all three approaches.
-2. Once inside Linux, [Download Docker Engine using the `apt` repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
-3. You're all set! You can begin the assignment by visiting the WATonomous Wiki.
-
-Link to Onboarding Assignment: https://wiki.watonomous.ca/
+- Run `./watod build localization` - Installs nav2, robot_localization, (turtlebot) gazebo - may take 20-30 mins to complete.
+- Run `./watod up localization`
+    - A small, transparent window will appear in the middle of the screen - this is for gazebo. It may take a few mins to fully load
+- In a new terminal window, run:
+    - `./watod -t localization` - This will "start bash shell in service localization".
+    - `cd /opt/watonomous/`
+    - `source setup.bash`
+    - `ros2 launch nav2_gps_waypoint_follower_demo dual_ekf_navsat.launch.py`
+- Open another new terminal and run:
+    - `./watod -t localization`
+    - `cd /opt/watonomous/`
+    - `source setup.bash`
+    - `ros2 launch nav2_gps_waypoint_follower_demo mapviz.launch.py`
